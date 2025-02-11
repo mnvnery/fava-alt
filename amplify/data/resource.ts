@@ -7,11 +7,19 @@ specifies that any unauthenticated user can "create", "read", "update",
 and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-  Todo: a
+    KnowledgeBase: a
     .model({
-      content: a.string(),
+      drug: a.string(),
+      medicineClass: a.string(),
+      therapeuticIndication: a.string(),
+      geneSymbol: a.string(),
+      phenotype: a.string(),
+      user_guidance: a.string(), 
+      user_interpretation: a.string(),
+      medical_guidance: a.string(), 
+      medical_interpretation: a.string(),
     })
-    .authorization((allow) => [allow.guest()]),
+    .authorization(allow => [allow.guest()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
