@@ -20,6 +20,19 @@ const schema = a.schema({
       medical_interpretation: a.string(),
     })
     .authorization(allow => [allow.guest()]),
+    Users: a
+    .model({
+      name: a.string(),
+      dob: a.date(),
+      sex: a.string(),
+      gender: a.string(),
+      ethnic_group: a.string(),
+      conditions: a.string(),
+      takes_medicines: a.boolean(), 
+      medicines: a.string(), 
+      medicine_issues: a.string(),
+    })
+    .authorization(allow => [allow.guest()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;

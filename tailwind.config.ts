@@ -11,6 +11,11 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        favaBean: "#91D789", 
+        favaCream: "#F4F1ED", 
+        favaGreen: "#0D2C26", 
+        favaPink: "#F992E6", 
+        favaGrey: "#495057"
       },
     },
   },
