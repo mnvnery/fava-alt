@@ -2,14 +2,16 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { signOut, getCurrentUser, fetchAuthSession } from '@aws-amplify/auth';
+import { signOut, getCurrentUser, fetchAuthSession, fetchUserAttributes } from '@aws-amplify/auth';
 import { useRouter } from 'next/navigation';
 
 export default function Nav({}) {
     const [isOpen, setIsOpen] = useState(false);
     const [user, setUser] = useState(null);
     const [session, setSession] = useState(null); // Add session state
+    const [userAttributes, setUserAttributes] = useState(null)
     const router = useRouter();
+
 
     useEffect(() => {
         const checkUserAndSession = async () => {
@@ -17,14 +19,18 @@ export default function Nav({}) {
                 const authUser = await getCurrentUser(); // Use getCurrentUser
                 setUser(authUser);
     
+                const userAttributes = await fetchUserAttributes();
+                setUserAttributes(userAttributes)
+
                 const authSession = await fetchAuthSession(); // Fetch session
                 setSession(authSession);
     
                 console.log("User:", authUser);
-                console.log("Session:", authSession); // Log the session
+                // console.log("Session:", authSession); // Log the session
+                //console.log("User Attributes", userAttributes)
                 // Access tokens:
-                console.log("Access Token:", authSession.tokens.accessToken.jwtToken);
-                console.log("ID Token:", authSession.tokens.idToken.jwtToken);
+                //console.log("Access Token:", authSession.tokens.accessToken.jwtToken);
+                //console.log("ID Token:", authSession.tokens.idToken.jwtToken);
     
             } catch (error) {
                 setUser(null);
@@ -34,10 +40,12 @@ export default function Nav({}) {
         };
 
         checkUserAndSession(); // Call combined function
+
+
     }, []); // Add checkUserAndSession to the dependency array    
 
     console.log(session)
-    
+
     const handleClick = () => {
         setIsOpen(!isOpen);
     };
@@ -66,15 +74,13 @@ export default function Nav({}) {
             <div className="flex items-center">
                 {user ? (
                     <div className="flex items-center space-x-4">
-                        {/*
+                        
                         <div>
-                           {user.attributes && user.attributes.name ? (
-                                <span className="text-sm">{user.attributes.name}</span>
-                            ) : (
-                                <span className="text-sm">{user.username}</span> // Default to username
+                           {userAttributes && userAttributes?.name && (
+                                <span className="text-sm">{userAttributes.name}</span> // Default to username
                             )}
                         </div>
-                        */}
+                        
                         <button onClick={handleSignOut} className="text-sm underline">
                             Sign Out
                         </button>
