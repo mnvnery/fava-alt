@@ -25,7 +25,7 @@ export default function Nav({}) {
 
             console.log("User:", authUser);
             console.log("Session:", authSession); // Log the session
-
+            console.log(session)
             // Access tokens:
             console.log("Access Token:", authSession.tokens.accessToken.jwtToken);
             console.log("ID Token:", authSession.tokens.idToken.jwtToken);

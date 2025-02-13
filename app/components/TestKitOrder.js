@@ -17,7 +17,7 @@ export default function TestKitOrder() {
             <div className="mt-6 text-sm text-center">
                 Please fill in your details and we&apos;ll get a test kit sent out to you in the next two working days.
             </div>
-            <form className="w-full mt-8 flex flex-col items-center justify-center">
+            <form onSubmit={() => setIsFilled(true)} className="w-full mt-8 flex flex-col items-center justify-center">
           {/* Name Field */}
           <div className="mb-4 w-full md:w-[25vw]">
             <label htmlFor="name" className="block text-xs text-favaGrey">

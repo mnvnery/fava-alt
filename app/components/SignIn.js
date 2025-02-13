@@ -15,7 +15,7 @@ function SignIn() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const router = useRouter(); // Initialize the router
+  //const router = useRouter(); // Initialize the router
 
   const handleSubmit = async (e) => {
     e.preventDefault();
