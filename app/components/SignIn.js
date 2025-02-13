@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Button from './Button'; // Your custom button component
 import { Amplify } from 'aws-amplify';
 import outputs from '@/amplify_outputs.json';
-import { useRouter } from 'next/navigation'; // Import the router
+// import { useRouter } from 'next/navigation'; // Import the router
 
 Amplify.configure(outputs);
 

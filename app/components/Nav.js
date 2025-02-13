@@ -12,32 +12,32 @@ export default function Nav({}) {
     const router = useRouter();
 
     useEffect(() => {
+        const checkUserAndSession = async () => {
+            try {
+                const authUser = await getCurrentUser(); // Use getCurrentUser
+                setUser(authUser);
+    
+                const authSession = await fetchAuthSession(); // Fetch session
+                setSession(authSession);
+    
+                console.log("User:", authUser);
+                console.log("Session:", authSession); // Log the session
+                // Access tokens:
+                console.log("Access Token:", authSession.tokens.accessToken.jwtToken);
+                console.log("ID Token:", authSession.tokens.idToken.jwtToken);
+    
+            } catch (error) {
+                setUser(null);
+                setSession(null); // Clear session state as well
+                console.log("No user or session found", error);
+            }
+        };
+
         checkUserAndSession(); // Call combined function
-    }, []);
+    }, []); // Add checkUserAndSession to the dependency array    
 
-    const checkUserAndSession = async () => {
-        try {
-            const authUser = await getCurrentUser(); // Use getCurrentUser
-            setUser(authUser);
-
-            const authSession = await fetchAuthSession(); // Fetch session
-            setSession(authSession);
-
-            console.log("User:", authUser);
-            console.log("Session:", authSession); // Log the session
-            console.log(session)
-            // Access tokens:
-            console.log("Access Token:", authSession.tokens.accessToken.jwtToken);
-            console.log("ID Token:", authSession.tokens.idToken.jwtToken);
-
-        } catch (error) {
-            setUser(null);
-            setSession(null); // Clear session state as well
-            console.log("No user or session found", error);
-        }
-    };
-
-
+    console.log(session)
+    
     const handleClick = () => {
         setIsOpen(!isOpen);
     };
