@@ -60,8 +60,8 @@ const handleConfirmPassword = async (e) => {
     try {
       await confirmResetPassword({ // Use confirmResetPassword
         username: email,
-        code,
-        newPassword,
+        confirmationCode: code,
+        newPassword: newPassword,
       });
       // Redirect or show success message
       alert('Password reset successfully!');
