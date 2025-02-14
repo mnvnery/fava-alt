@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Button from './Button'; // Your custom button component
 import { Amplify } from 'aws-amplify';
 import outputs from '@/amplify_outputs.json';
-// import { useRouter } from 'next/navigation'; // Import the router
+import { useRouter } from 'next/navigation'; // Import the router
 
 Amplify.configure(outputs);
 
@@ -15,7 +15,7 @@ function SignIn() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  //const router = useRouter(); // Initialize the router
+  const router = useRouter(); // Initialize the router
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +25,7 @@ function SignIn() {
     try {
       await signIn({ username: email, password }); // Use signIn
       // Redirect on successful sign-in
-      //router.push('/protected-page'); // Replace with your protected page route
+      router.push('/order'); // Replace with your protected page route
       console.log('successfull sign-in')
     } catch (err) {
       setError(err.message); // Display error message
@@ -46,7 +46,7 @@ function SignIn() {
       />
       <div className="text-xl font-bold">Sign In</div>
 
-      {error && <p className="text-red-500 mt-4">{error}</p>}
+      {error && <p className="text-red-500 mt-4 text-sm">{error}</p>}
 
       <form onSubmit={handleSubmit} className="w-full mt-8 flex flex-col items-center justify-center px-10">
         <div className="mb-4 w-full md:w-[25vw]">

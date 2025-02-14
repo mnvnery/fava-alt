@@ -72,7 +72,7 @@ export default function Nav({}) {
                 className=""
             />
             <div className="flex items-center">
-                {user ? (
+                {user && session ? (
                     <div className="flex items-center space-x-4">
                         
                         <div>
@@ -85,10 +85,14 @@ export default function Nav({}) {
                             Sign Out
                         </button>
                     </div>
-                ) : null}
+                ) : (
+                    <button onClick={() => router.push('/login')} className="text-sm underline">
+                        Login
+                    </button>
+                )}
                 <button
                     onClick={handleClick}
-                    className="flex flex-col justify-center items-center md:hidden z-50 relative ml-4"
+                    className="flex flex-col justify-center items-center z-50 relative ml-4"
                 >
                     <span className={`bg-favaGreen block transition-all duration-300 ease-out h-0.5 w-5 rounded-sm ${isOpen ? "rotate-45 translate-y-1" : "-translate-y-0.5"}`}></span>
                     <span className={`bg-favaGreen block transition-all duration-300 ease-out h-0.5 w-5 rounded-sm my-0.5 ${isOpen ? "opacity-0" : "opacity-100"}`}></span>

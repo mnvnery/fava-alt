@@ -1,11 +1,11 @@
 import Nav from '../components/Nav'
-import TokenSignUp from '../components/TokenSignUp'
+import Questionaire from '../components/Questionaire'
 
 export default function Dashboard() {
     return (    
         <div className=''>
             <Nav/>
-            <TokenSignUp/>
+            <Questionaire/>
         </div>
     );
 }

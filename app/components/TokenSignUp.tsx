@@ -24,6 +24,7 @@ function TokenSignUp() {
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
   const [stage, setStage] = useState<'signUp' | 'confirm' | 'confirmed'>('signUp');
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
 
   useEffect(() => {
     if (!inviteToken) {
@@ -76,8 +77,12 @@ function TokenSignUp() {
       } else if (nextStep.signUpStep === 'CONFIRM_SIGN_UP') {
         setStage('confirm');
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+          setError(err.message);
+      } else {
+          setError("An unknown error occurred");
+      }
       console.error("Sign-up error:", err);
     } finally {
       setLoading(false);
@@ -115,8 +120,12 @@ function TokenSignUp() {
           router.push('/login'); // Redirect to login if auto sign-in fails
         }
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+          setError(err.message);
+      } else {
+          setError("An unknown error occurred");
+      }
       console.error("Error confirming sign-up:", err);
     } finally {
       setLoading(false);
@@ -124,13 +133,46 @@ function TokenSignUp() {
   };
   
 
+  const validatePassword = (password: string) => {
+    const minLength = password.length >= 8;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  
+    return {
+      isValid: minLength && hasUppercase && hasLowercase && hasNumber && hasSpecialChar,
+      errors: [
+        !minLength && "At least 8 characters",
+        !hasUppercase && "At least one uppercase letter",
+        !hasNumber && "At least one number",
+        !hasSpecialChar && "At least one special character"
+      ].filter(Boolean), // Remove false values
+    };
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    const validation = validatePassword(e.target.value);
+    setPasswordErrors(validation.errors);
+  };
+
   return (
     <div className="flex flex-col justify-center items-center w-full">
       <Image src="/img/Fava-logo-dark.svg" width={350} height={250} alt="Fava Logo" className="mt-[5vh]" />
       <div className="text-xl font-bold">Sign Up</div>
 
       {error ? (
-        <p className="text-red-500 mt-4">{error}</p>
+        <div className="mt-4 text-center">
+          <p className="text-red-500 mb-10">{error}</p>
+          {error.includes("already exists") && (
+            <Button
+              onClick={() => router.push('/login')}
+              text="Login"
+              colour="bg-favaGreen text-white"
+            />
+          )}
+        </div>
       ) : user ? (
         stage === 'signUp' ? (
           <form onSubmit={handleSignUp} className="w-full mt-8 flex flex-col items-center justify-center px-10">
@@ -144,7 +186,21 @@ function TokenSignUp() {
             </div>
             <div className="mb-6 w-full md:w-[25vw]">
               <label className="block text-xs text-favaGrey">Password</label>
-              <input type="password" className="mt-1 text-sm block w-full px-3 py-2 border border-favaGreen rounded-md" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <input
+                type="password"
+                className="mt-1 text-sm block w-full px-3 py-2 border border-favaGreen rounded-md"
+                placeholder="Enter your password"
+                value={password}
+                onChange={handlePasswordChange}
+                required
+              />
+              {passwordErrors.length > 0 && (
+                <ul className="text-xs text-red-500 mt-1.5">
+                  {passwordErrors.map((err, index) => (
+                    <li key={index}>• {err}</li>
+                  ))}
+                </ul>
+              )}
             </div>
             <button type="submit" disabled={loading} className="mt-8">
               <Button text={loading ? 'Signing Up...' : 'Sign Up'} colour="bg-favaGreen text-white" />
