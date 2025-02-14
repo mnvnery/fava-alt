@@ -25,7 +25,7 @@ export default function Nav({}) {
                 const authSession = await fetchAuthSession(); // Fetch session
                 setSession(authSession);
     
-                console.log("User:", authUser);
+                //console.log("User:", authUser);
                 // console.log("Session:", authSession); // Log the session
                 //console.log("User Attributes", userAttributes)
                 // Access tokens:
@@ -44,7 +44,7 @@ export default function Nav({}) {
 
     }, []); // Add checkUserAndSession to the dependency array    
 
-    console.log(session)
+    //console.log(session)
 
     const handleClick = () => {
         setIsOpen(!isOpen);
@@ -61,7 +61,7 @@ export default function Nav({}) {
         }
     };
 
-    console.log(user)
+    // console.log(user)
     return (
         <div className={`flex justify-between items-center py-3 px-4`}>
             <Image 

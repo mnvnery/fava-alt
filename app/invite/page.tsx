@@ -1,11 +1,11 @@
 import Nav from '../components/Nav'
-import SignUp from '../components/SignUp'
+import TokenSignUp from '../components/TokenSignUp'
 
 export default function Invite() {
     return (    
         <div className=''>
             <Nav/>
-            <SignUp/>
+            <TokenSignUp/>
         </div>
     );
 }

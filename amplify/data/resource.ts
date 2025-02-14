@@ -22,7 +22,9 @@ const schema = a.schema({
     .authorization(allow => [allow.guest()]),
     Users: a
     .model({
+      favaId: a.string(),
       name: a.string(),
+      email: a.string(),
       dob: a.date(),
       sex: a.string(),
       gender: a.string(),
@@ -31,8 +33,10 @@ const schema = a.schema({
       takes_medicines: a.boolean(), 
       medicines: a.string(), 
       medicine_issues: a.string(),
+      inviteToken: a.string(),  
+      isActivated: a.boolean(), 
     })
-    .authorization(allow => [allow.guest()]),
+    .authorization(allow => [allow.publicApiKey()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -41,6 +45,9 @@ export const data = defineData({
   schema,
   authorizationModes: {
     defaultAuthorizationMode: 'iam',
+    apiKeyAuthorizationMode: {
+      expiresInDays: 30,
+    },
   },
 });
 
