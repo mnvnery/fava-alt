@@ -35,8 +35,14 @@ export async function POST(req: Request) {
         }
 
         return NextResponse.json({ success: true, message: "Invite sent!" }, { status: 200 });
-    } catch (error) {
+    } catch (error: unknown) {
         console.error("Error sending invite:", error);
-        return NextResponse.json({ error: error.message || "Failed to send invite" }, { status: 500 }); // Access error message
+    
+        let errorMessage = "Failed to send invite";
+        if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+    
+        return NextResponse.json({ error: errorMessage }, { status: 500 });
     }
 }
