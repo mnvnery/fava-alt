@@ -8,20 +8,27 @@ export default function Questionaire() {
     const questions = [
         {
             number: "1",
+            question: "What is your date of birth?",
+            info: "We capture this to better understand your risk and tailor your results",
+            answers: ["Female", "Male", "Other", "Prefer not to say"],
+            multipleChoice: false
+        },
+        {
+            number: "2",
             question: "What gender do you identify with?",
             info: "Some people don’t identify with the sex they were assigned at birth. So we ask for your gender so that we can address you correctly.",
             answers: ["Female", "Male", "Other", "Prefer not to say"],
             multipleChoice: false
         },
         {
-            number: "2",
+            number: "3",
             question: "What sex were you assigned at birth?",
             info: "We ask this so we can further personalise your medicines.",
             answers: ["Female", "Male"],
             multipleChoice: false
         },
         {
-            number: "3",
+            number: "4",
             question: "Have you ever experienced any of the following?",
             info: "Please select all that apply.",
             answers: ["Pain", "Depression/Anxiety", "High Cholesterol", "Stroke", "Heart Attack", "Heartburn/Reflux", "Blood Clots", "None of the above"],

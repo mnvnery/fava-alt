@@ -62,11 +62,11 @@ function TokenSignUp() {
 
     try {
       const { isSignUpComplete, nextStep } = await signUp({
-        username: user!.email,
+        username: user?.email ?? "",
         password,
         options: {
           userAttributes: {
-            name: user!.name,
+            name: user?.name ?? "",
           },
         },
       });
@@ -96,7 +96,7 @@ function TokenSignUp() {
   
     try {
       const { isSignUpComplete } = await confirmSignUp({
-        username: user!.email,
+        username: user?.email ?? "",
         confirmationCode: code,
       });
   
