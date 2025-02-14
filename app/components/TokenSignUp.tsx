@@ -35,7 +35,7 @@ function TokenSignUp() {
     async function fetchUser() {
       try {
         const result = await client.models.Users.list({
-          filter: { inviteToken: { eq: inviteToken } }, // Find user by token
+          filter: { inviteToken: { eq: inviteToken ?? undefined } }, 
         });
 
         console.log(result.data)
