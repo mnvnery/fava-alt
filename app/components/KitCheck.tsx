@@ -1,6 +1,6 @@
 import Button from "./Button";
 
-export default function ResetPassword() {
+const ResetPassword = () => {
     return (
         <div className="flex flex-col justify-center items-center w-full h-[80dvh] text-center px-5">
             <div className="text-xl font-bold">Have you received one of our test kits already?</div>
@@ -10,9 +10,11 @@ export default function ResetPassword() {
                 If not, don’t worry. We’ll sort you out.
             </div>
             <div className="flex space-x-6 mt-8">
-            <Button text="Yes" colour="bg-favaGreen text-white"/>
-            <Button text="No" colour="bg-favaBean text-favaGreen"/>
+            <Button text="Yes" colour="bg-favaGreen text-white" onClick={undefined}/>
+            <Button text="No" colour="bg-favaBean text-favaGreen" onClick={undefined}/>
             </div>
         </div>
     );
 }
+
+export default ResetPassword;

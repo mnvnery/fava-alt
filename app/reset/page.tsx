@@ -1,11 +1,11 @@
 import Nav from '../components/Nav'
-import SignIn from '../components/SignIn'
+import ResetPassword from '../components/ResetPassword'
 
-export default function Invite() {
+export default function Reset() {
     return (    
         <div className=''>
             <Nav/>
-            <SignIn/>
+            <ResetPassword/>
         </div>
     );
 }

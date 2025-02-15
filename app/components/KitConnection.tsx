@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Button from './Button'
 
-export default function KitConnection() {
+const KitConnection = () => {
     return (
         <div className="flex flex-col justify-center items-center w-full h-[80dvh] text-center px-12">
             <div className="text-xl font-bold">Let’s connect your test kit to your account.</div>
@@ -25,8 +25,10 @@ export default function KitConnection() {
               required
             />
             <div className="flex space-x-6 mt-14">
-                <Button text="Submit" colour="bg-favaGreen text-white" />
+                <Button text="Submit" colour="bg-favaGreen text-white" onClick={undefined} />
             </div>
         </div>
     );
 }
+
+export default KitConnection;

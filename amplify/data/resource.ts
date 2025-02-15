@@ -25,6 +25,11 @@ const schema = a.schema({
       favaId: a.string(),
       name: a.string(),
       email: a.string(),
+      address_1: a.string(), 
+      address_2: a.string(), 
+      city: a.string(), 
+      county: a.string(), 
+      postcode: a.string(),
       dob: a.date(),
       sex: a.string(),
       gender: a.string(),
@@ -35,6 +40,7 @@ const schema = a.schema({
       medicine_issues: a.string(),
       inviteToken: a.string(),  
       isActivated: a.boolean(), 
+      inPerson: a.boolean()
     })
     .authorization(allow => [allow.publicApiKey()]),
 });

@@ -67,13 +67,14 @@ function TokenSignUp() {
         options: {
           userAttributes: {
             name: user?.name ?? "",
+            'custom:user_id': user?.id
           },
         },
       });
 
       if (isSignUpComplete) {
         setStage('confirmed');
-        router.push('/login');
+        //router.push('/login');
       } else if (nextStep.signUpStep === 'CONFIRM_SIGN_UP') {
         setStage('confirm');
       }
@@ -154,9 +155,8 @@ function TokenSignUp() {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
     const validation = validatePassword(e.target.value);
-    setPasswordErrors(validation.errors);
+    setPasswordErrors(validation.errors.filter(Boolean) as string[]); // Type assertion
   };
-
   return (
     <div className="flex flex-col justify-center items-center w-full">
       <Image src="/img/Fava-logo-dark.svg" width={350} height={250} alt="Fava Logo" className="mt-[5vh]" />
@@ -178,11 +178,11 @@ function TokenSignUp() {
           <form onSubmit={handleSignUp} className="w-full mt-8 flex flex-col items-center justify-center px-10">
             <div className="mb-4 w-full md:w-[25vw]">
               <label className="block text-xs text-favaGrey">Name</label>
-              <input type="text" className="mt-1 text-sm block w-full px-3 py-2 border border-favaGreen rounded-md" value={user.name} disabled />
+              <input type="text" className="mt-1 text-sm block w-full px-3 py-2 border border-favaGreen rounded-md" value={user?.name ?? ""} disabled />
             </div>
             <div className="mb-4 w-full md:w-[25vw]">
               <label className="block text-xs text-favaGrey">Email</label>
-              <input type="email" className="mt-1 text-sm block w-full px-3 py-2 border border-favaGreen rounded-md" value={user.email} disabled />
+              <input type="email" className="mt-1 text-sm block w-full px-3 py-2 border border-favaGreen rounded-md" value={user?.email ?? ""} disabled />
             </div>
             <div className="mb-6 w-full md:w-[25vw]">
               <label className="block text-xs text-favaGrey">Password</label>
@@ -203,7 +203,7 @@ function TokenSignUp() {
               )}
             </div>
             <button type="submit" disabled={loading} className="mt-8">
-              <Button text={loading ? 'Signing Up...' : 'Sign Up'} colour="bg-favaGreen text-white" />
+              <Button text={loading ? 'Signing Up...' : 'Sign Up'} colour="bg-favaGreen text-white" onClick={undefined} />
             </button>
           </form>
         ) : stage === 'confirm' ? (
@@ -213,7 +213,7 @@ function TokenSignUp() {
               <input type="text" className="mt-1 text-sm block w-full px-3 py-2 border border-favaGreen rounded-md" placeholder="Enter your code" value={code} onChange={(e) => setCode(e.target.value)} required />
             </div>
             <button type="submit" disabled={loading} className="mt-8">
-              <Button text={loading ? 'Confirming...' : 'Confirm'} colour="bg-favaGreen text-white" />
+              <Button text={loading ? 'Confirming...' : 'Confirm'} colour="bg-favaGreen text-white" onClick={undefined} />
             </button>
           </form>
         ) : (
