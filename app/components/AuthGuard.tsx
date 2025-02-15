@@ -18,7 +18,8 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
         await getCurrentUser(); // Try to fetch the current user
         setIsAuthenticated(true);
       } catch (error) {
-        router.push('/login'); // Redirect to login if user is not authenticated
+        console.error("Authentication error:", error); // Log the error
+        router.push('/login');
       } finally {
         setLoading(false);
       }
