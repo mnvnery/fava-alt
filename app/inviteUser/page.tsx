@@ -66,7 +66,6 @@ export default function InviteUser() {
                         {users.map((user) => (
                             <li key={user.id} className="p-2 border rounded-md bg-gray-100">
                                 <span className="font-medium">{user.name}</span> - {user.email} - {user.inviteToken}
-                                {user.isActivated ? " ✅ Activated" : " ❌ Pending"}
                                 <div className="underline cursor-pointer" onClick={() => deleteUser(user.id)}>Delete</div>
                             </li>
                         ))}

@@ -25,7 +25,7 @@ export async function inviteUser(email: string, name: string) {
             name,
             favaId,
             inviteToken,
-            isActivated: false, // User isn't active yet
+            status: 'Invited'
         });
 
         console.log("New user created:", newUser);

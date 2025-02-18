@@ -9,6 +9,7 @@ import Button from './Button';
 import { Amplify } from 'aws-amplify';
 import outputs from '@/amplify_outputs.json';
 import type { Schema } from "@/amplify/data/resource";
+import { updateUser } from '@/utils/updateUser';
 
 Amplify.configure(outputs);
 const client = generateClient<Schema>({ authMode: "apiKey" }); // Using API Key
@@ -74,7 +75,11 @@ function TokenSignUp() {
 
       if (isSignUpComplete) {
         setStage('confirmed');
-        //router.push('/login');
+      
+        if (user?.id) {
+          await updateUser(user.id, { status: "Kit Check" });
+          setUser((prevUser) => prevUser ? { ...prevUser, status: "Kit Check" } : prevUser);
+        }
       } else if (nextStep.signUpStep === 'CONFIRM_SIGN_UP') {
         setStage('confirm');
       }
@@ -110,7 +115,7 @@ function TokenSignUp() {
   
           if (nextStep.signInStep === 'DONE') {
             console.log('Successfully signed in.');
-            router.push('/dashboard'); // Redirect to the dashboard or another protected page
+            router.push('/order'); // Redirect to the dashboard or another protected page
           } else {
             console.warn('Unexpected next step in autoSignIn:', nextStep.signInStep);
             router.push('/login'); // Fallback to login if auto sign-in fails

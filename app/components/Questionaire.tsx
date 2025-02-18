@@ -4,7 +4,7 @@ import { useState } from "react";
 import QuizQuestion from "./QuizQuestion";
 import Button from "./Button";
 import TitleTextBtn from "./TitleTextBtn";
-import { updateUser } from "@/utils/updateUser";
+import { updateUserQuestionaire } from "@/utils/updateUserQuestionaire";
 
 interface Question {
     question: string;
@@ -14,7 +14,12 @@ interface Question {
     inputType?: string; // Optional input type
 }
 
-export default function Questionaire() {
+interface QuestionaireProps {
+    userId: string;
+    btnOnClick: (() => void) | undefined;
+}
+
+const Questionaire = ({userId, btnOnClick} : QuestionaireProps) => {
     const questions: Question[] = [ // Type the questions array
         {
             question: "What is your date of birth?",
@@ -82,7 +87,7 @@ export default function Questionaire() {
 
     const handleUpdateUser = async () => {
         try {
-            const updatedUser = await updateUser(selectedAnswers);
+            const updatedUser = await updateUserQuestionaire(userId, selectedAnswers);
     
             if (updatedUser) {
                 console.log("User updated successfully:", updatedUser);
@@ -161,10 +166,12 @@ export default function Questionaire() {
                     </div>
                 </>
             ) : (
-                <TitleTextBtn title="It's good to get to know you." btnText="Done" btnColour="bg-favaGreen text-white">
+                <TitleTextBtn btnOnClick={btnOnClick} title="It's good to get to know you." btnText="Done" btnColour="bg-favaGreen text-white">
                     You&apos;re one step closer to personalising your medicines.
                 </TitleTextBtn>
             )}
         </div>
     );
 }
+
+export default Questionaire;
