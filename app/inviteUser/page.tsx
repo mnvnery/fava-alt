@@ -48,7 +48,7 @@ export default function InviteUser() {
       }
 
     return (
-        <div className="flex flex-col justify-center items-center h-dvh">
+        <div className="flex flex-col justify-center items-center h-dvh p-5">
             <div className="text-xl font-bold">Invite a User</div>
 
             {/* Invite Form */}
@@ -65,7 +65,7 @@ export default function InviteUser() {
                     <ul className="mt-4 space-y-2">
                         {users.map((user) => (
                             <li key={user.id} className="p-2 border rounded-md bg-gray-100">
-                                <span className="font-medium">{user.name}</span> - {user.email} - {user.inviteToken}
+                                <span className="font-medium">{user.name}</span> - {user.email} - {user.inviteToken} - {user.status}
                                 <div className="underline cursor-pointer" onClick={() => deleteUser(user.id)}>Delete</div>
                             </li>
                         ))}

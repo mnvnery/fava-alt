@@ -43,6 +43,29 @@ const schema = a.schema({
       status: a.string(),  
     })
     .authorization(allow => [allow.publicApiKey()]),
+    UserResults: a
+    .model({
+      favaId: a.string(),
+      name: a.string(),
+      email: a.string(),
+      address1: a.string(), 
+      address2: a.string(), 
+      city: a.string(), 
+      county: a.string(), 
+      postcode: a.string(),
+      dob: a.date(),
+      sex: a.string(),
+      gender: a.string(),
+      ethnicGroup: a.string(),
+      conditions: a.string(),
+      takesMedicines: a.boolean(), 
+      medicines: a.string(), 
+      medicineIssues: a.string(),
+      inviteToken: a.string(),  
+      inPerson: a.boolean(), 
+      status: a.string(),  
+    })
+    .authorization(allow => [allow.publicApiKey()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
