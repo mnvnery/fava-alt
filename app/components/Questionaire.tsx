@@ -129,10 +129,10 @@ const Questionaire = ({userId, btnOnClick} : QuestionaireProps) => {
     };
     
     return (
-        <div className="flex flex-col justify-center items-center w-full h-[80dvh] text-center px-12">
+        <div className="flex flex-col justify-center items-center w-full h-[90dvh] text-center px-12">
             {!isEnd ? (
                 <>
-                    <div className="text-xl font-bold">When it comes to your genes, it&apos;s personal.</div>
+                    <div className="text-2xl font-bold">When it comes to your genes, it&apos;s personal.</div>
                     <div className="mt-6 mb-10 text-sm text-center">
                         Answer a few questions to help us tailor your results to your needs.
                     </div>

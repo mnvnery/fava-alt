@@ -20,7 +20,7 @@ const schema = a.schema({
       medicalInterpretation: a.string(),
     })
     .authorization(allow => [allow.guest()]),
-    Users: a
+    User: a
     .model({
       favaId: a.string(),
       name: a.string(),
@@ -41,29 +41,24 @@ const schema = a.schema({
       inviteToken: a.string(),  
       inPerson: a.boolean(), 
       status: a.string(),  
+      testResult: a.hasMany('TestResult', 'userId'),
+      testKit: a.hasMany('TestKit', 'userId')
     })
     .authorization(allow => [allow.publicApiKey()]),
-    UserResults: a
+    TestKit: a
     .model({
-      favaId: a.string(),
-      name: a.string(),
-      email: a.string(),
-      address1: a.string(), 
-      address2: a.string(), 
-      city: a.string(), 
-      county: a.string(), 
-      postcode: a.string(),
-      dob: a.date(),
-      sex: a.string(),
-      gender: a.string(),
-      ethnicGroup: a.string(),
-      conditions: a.string(),
-      takesMedicines: a.boolean(), 
-      medicines: a.string(), 
-      medicineIssues: a.string(),
-      inviteToken: a.string(),  
-      inPerson: a.boolean(), 
-      status: a.string(),  
+      userId: a.id(),
+      user: a.belongsTo("User", 'userId'), 
+      testKitSerial: a.string(), 
+    })
+    .authorization(allow => [allow.publicApiKey()]),
+    TestResult: a
+    .model({
+      userId: a.id(),
+      user: a.belongsTo("User", 'userId'), 
+      genotype: a.string(), 
+      diplotype: a.string(), 
+      phenotype: a.string()
     })
     .authorization(allow => [allow.publicApiKey()]),
 });
@@ -80,6 +75,9 @@ export const data = defineData({
   },
 });
 
+    {/* 
+
+    */}
 /*== STEP 2 ===============================================================
 Go to your frontend source code. From your client-side code, generate a
 Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY

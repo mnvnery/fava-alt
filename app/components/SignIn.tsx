@@ -2,34 +2,43 @@
 
 import { useState } from 'react';
 import { signIn } from '@aws-amplify/auth';
+import { useRouter, useSearchParams } from 'next/navigation'; // Use searchParams
 import Image from 'next/image';
-import Button from './Button'; // Your custom button component
+import Button from './Button';
 import { Amplify } from 'aws-amplify';
 import outputs from '@/amplify_outputs.json';
-import { useRouter } from 'next/navigation'; // Import the router
+import Link from 'next/link';
 
 Amplify.configure(outputs);
 
 function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const router = useRouter(); // Initialize the router
+  const router = useRouter();
+  const searchParams = useSearchParams(); // Get query params
 
-  const handleSubmit = async (e) => {
+  // Get redirect path from URL (fallback to /order if not provided)
+  const redirectTo = searchParams.get('redirect') || '/order';
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
-      await signIn({ username: email, password }); // Use signIn
-      // Redirect on successful sign-in
-      router.push('/order'); // Replace with your protected page route
-      console.log('successfull sign-in')
-    } catch (err) {
-      setError(err.message); // Display error message
-      console.error('Error signing in:', err);
+      await signIn({ username: email, password });
+      console.log('Successful sign-in');
+      router.push(redirectTo); // Redirect to stored path
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+        console.error('Error signing in:', err.message);
+      } else {
+        setError('An unknown error occurred');
+        console.error('Unknown error:', err);
+      }
     } finally {
       setLoading(false);
     }
@@ -44,7 +53,7 @@ function SignIn() {
         alt="Fava Logo"
         className="mt-[5vh]"
       />
-      <div className="text-xl font-bold">Sign In</div>
+      <div className="text-2xl font-bold">Sign In</div>
 
       {error && <p className="text-red-500 mt-4 text-sm">{error}</p>}
 
@@ -82,13 +91,15 @@ function SignIn() {
         </div>
 
         <button type="submit" disabled={loading} className="mt-8">
-          <Button text={loading ? 'Signing In...' : 'Sign In'} colour="bg-favaGreen text-white" />
+          <Button onClick={undefined} text={loading ? 'Signing In...' : 'Sign In'} colour="bg-favaGreen text-white" />
         </button>
       </form>
 
-      <div className="mt-8 text-sm">
-        Don&apos;t have an account? <span className="underline cursor-pointer">Sign up here</span> {/* Link to sign-up */}
-      </div>
+      <Link href="/reset">
+        <div className="mt-8 text-sm hover:underline pointer-cursor">
+          Forgot your password?
+        </div>
+      </Link>
     </div>
   );
 }

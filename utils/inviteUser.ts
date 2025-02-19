@@ -20,7 +20,7 @@ export async function inviteUser(email: string, name: string) {
     const favaId = generateFavaID();
 
     try {
-        const newUser = await client.models.Users.create({
+        const newUser = await client.models.User.create({
             email,
             name,
             favaId,

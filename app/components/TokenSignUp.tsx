@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { signUp, confirmSignUp, autoSignIn } from '@aws-amplify/auth';
+import { signUp, confirmSignUp, autoSignIn, signOut } from '@aws-amplify/auth';
 import { generateClient } from "aws-amplify/data";
 import Image from 'next/image';
 import Button from './Button';
@@ -10,6 +10,9 @@ import { Amplify } from 'aws-amplify';
 import outputs from '@/amplify_outputs.json';
 import type { Schema } from "@/amplify/data/resource";
 import { updateUser } from '@/utils/updateUser';
+import Loading from '../loading';
+import { isSignedIn } from "@/utils/isSignedIn";
+
 
 Amplify.configure(outputs);
 const client = generateClient<Schema>({ authMode: "apiKey" }); // Using API Key
@@ -19,13 +22,29 @@ function TokenSignUp() {
   const router = useRouter();
   
   const inviteToken = searchParams.get('token'); // Extract token from URL
-  const [user, setUser] = useState<Schema["Users"]["type"] | null>(null);
+  const [user, setUser] = useState<Schema["User"]["type"] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
   const [stage, setStage] = useState<'signUp' | 'confirm' | 'confirmed'>('signUp');
   const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function checkAuth() {
+      const signedIn = await isSignedIn();
+
+      if (signedIn) {
+        const proceed = confirm("You're already signed in. Would you like to sign out and continue with this sign-up process?");
+        if (proceed) {
+          await signOut();
+        } else {
+          router.push('/order'); // Or wherever the user should go if they stay logged in
+        }
+      }
+    }
+    checkAuth();
+  }, [router]);
 
   useEffect(() => {
     if (!inviteToken) {
@@ -35,11 +54,9 @@ function TokenSignUp() {
 
     async function fetchUser() {
       try {
-        const result = await client.models.Users.list({
+        const result = await client.models.User.list({
           filter: { inviteToken: { eq: inviteToken ?? undefined } }, 
         });
-
-        console.log(result.data)
 
         if (result.data.length === 0) {
           setError("Invalid or expired invite token.");
@@ -56,6 +73,7 @@ function TokenSignUp() {
     fetchUser();
   }, [inviteToken]);
 
+  //console.log(user)
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -70,16 +88,12 @@ function TokenSignUp() {
             name: user?.name ?? "",
             'custom:user_id': user?.id
           },
+          autoSignIn: true
         },
       });
 
       if (isSignUpComplete) {
         setStage('confirmed');
-      
-        if (user?.id) {
-          await updateUser(user.id, { status: "Kit Check" });
-          setUser((prevUser) => prevUser ? { ...prevUser, status: "Kit Check" } : prevUser);
-        }
       } else if (nextStep.signUpStep === 'CONFIRM_SIGN_UP') {
         setStage('confirm');
       }
@@ -101,43 +115,52 @@ function TokenSignUp() {
     setError(null);
   
     try {
-      const { isSignUpComplete } = await confirmSignUp({
+      const { nextStep } = await confirmSignUp({
         username: user?.email ?? "",
         confirmationCode: code,
       });
   
-      if (isSignUpComplete) {
-        setStage('confirmed');
-  
-        // Attempt auto sign-in
+      if (nextStep.signUpStep === 'COMPLETE_AUTO_SIGN_IN') {
+        // Call autoSignIn only if this step is returned
         try {
-          const { nextStep } = await autoSignIn();
+          const { nextStep: autoSignInStep } = await autoSignIn();
   
-          if (nextStep.signInStep === 'DONE') {
+          if (autoSignInStep.signInStep === 'DONE') {
             console.log('Successfully signed in.');
-            router.push('/order'); // Redirect to the dashboard or another protected page
+            if (user?.id) {
+              await updateUser(user.id, { status: "Kit Check" });
+              setUser((prevUser) => prevUser ? { ...prevUser, status: "Kit Check" } : prevUser);
+            }
+            router.push('/order'); // Redirect to the order page
           } else {
-            console.warn('Unexpected next step in autoSignIn:', nextStep.signInStep);
-            router.push('/login'); // Fallback to login if auto sign-in fails
+            console.warn('Unexpected next step in autoSignIn:', autoSignInStep.signInStep);
+            //router.push('/login'); // Fallback to login if auto sign-in fails
           }
         } catch (autoSignInError) {
           console.error('Auto sign-in failed:', autoSignInError);
           setError("Auto sign-in failed. Please log in manually.");
-          router.push('/login'); // Redirect to login if auto sign-in fails
+          //router.push('/login'); // Redirect to login if auto sign-in fails
+        }
+      } else {
+        // If auto sign-in step isn't returned, manually redirect to login
+        setStage('confirmed');
+        router.push('/login');
+        if (user?.id) {
+          await updateUser(user.id, { status: "Kit Check" });
+          setUser((prevUser) => prevUser ? { ...prevUser, status: "Kit Check" } : prevUser);
         }
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
-          setError(err.message);
+        setError(err.message);
       } else {
-          setError("An unknown error occurred");
+        setError("An unknown error occurred");
       }
       console.error("Error confirming sign-up:", err);
     } finally {
       setLoading(false);
     }
   };
-  
 
   const validatePassword = (password: string) => {
     const minLength = password.length >= 8;
@@ -165,7 +188,7 @@ function TokenSignUp() {
   return (
     <div className="flex flex-col justify-center items-center w-full">
       <Image src="/img/Fava-logo-dark.svg" width={350} height={250} alt="Fava Logo" className="mt-[5vh]" />
-      <div className="text-xl font-bold">Sign Up</div>
+      <div className="text-2xl font-bold">Sign Up</div>
 
       {error ? (
         <div className="mt-4 text-center">
@@ -225,7 +248,8 @@ function TokenSignUp() {
           <p>Sign up confirmed! Redirecting to login...</p>
         )
       ) : (
-        <p>Loading...</p>
+        
+        <Loading/>
       )}
     </div>
   );

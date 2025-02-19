@@ -85,7 +85,7 @@ function SignUp() {
         alt="Fava Logo"
         className="mt-[5vh]"
       />
-      <div className="text-xl font-bold">Sign Up</div>
+      <div className="text-2xl font-bold">Sign Up</div>
 
       {error && <p className="text-red-500 mt-4">{error}</p>}
 

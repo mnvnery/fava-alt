@@ -36,7 +36,7 @@ export const updateUser = async (userId: string | null | undefined, updates: Par
     }
 
     try {
-        const { data, errors } = await client.models.Users.update({ id: userId, ...updates });
+        const { data, errors } = await client.models.User.update({ id: userId, ...updates });
 
         if (errors) {
             console.error('Error updating user:', errors);

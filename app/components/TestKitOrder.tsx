@@ -38,8 +38,8 @@ const TestKitOrder = ({ userId, name, onClick }: OrderProps) => {
 
     return (
         <div className="flex flex-col justify-center items-center w-full h-[85dvh] px-10">
-            <div className="text-xl font-bold">Let&apos;s get you a test kit.</div>
-            <div className="mt-6 text-sm text-center">
+            <div className="text-2xl font-bold">Let&apos;s get you a test kit.</div>
+            <div className="mt-6 text-base text-center">
                 Please fill in your details and we&apos;ll get a test kit sent out to you in the next two working days.
             </div>
         <form onSubmit={handleUpdateOrder} className="w-full mt-8 flex flex-col items-center justify-center">

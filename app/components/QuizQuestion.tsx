@@ -12,6 +12,8 @@ interface QuizQuestionProps {
     inputType?: string;
 }
 
+const today = new Date().toISOString().split("T")[0];
+
 const QuizQuestion: React.FC<QuizQuestionProps> = ({
     index, // Now using index
     question,
@@ -32,6 +34,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
                     id={`answer-${index}`}
                     value={selected as string || ""}
                     onChange={(e) => onSelect(e.target.value)}
+                    max={today} // No future dates
                     className="border border-gray-300 rounded px-3 py-2 mt-2 w-full"
                 />
             );

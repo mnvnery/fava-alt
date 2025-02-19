@@ -6,8 +6,8 @@ interface ResetPasswordProps {
 const ResetPassword = ({onClickHome, onClickInPerson} : ResetPasswordProps) => {
     return (
         <div className="flex flex-col justify-center items-center w-full h-[80dvh] text-center px-5">
-            <div className="text-xl font-bold">We&apos;ll be coming to the Genedrive offices to collect samples.</div>
-            <div className="mt-6 text-sm text-center">
+            <div className="text-2xl font-bold">We&apos;ll be coming to the Genedrive offices to collect samples.</div>
+            <div className="mt-6 text-base text-center">
                 But if that doesn&apos;t work for you, don&apos;t worry.
                 <br/>
                 We can post a test out to you.

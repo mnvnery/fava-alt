@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Button from './Button'; // Assuming this is your custom button component
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
+import Link from 'next/link';
 
 Amplify.configure(outputs);
 
@@ -83,7 +84,7 @@ const handleConfirmPassword = async (e) => {
         alt="Fava Logo"
         className="mt-[5vh]"
       />
-      <div className="text-xl font-bold">Reset Your Password</div>
+      <div className="text-2xl font-bold">Reset Your Password</div>
 
       {error && <p className="text-red-500 mt-4">{error}</p>} {/* Error display */}
 
@@ -148,9 +149,11 @@ const handleConfirmPassword = async (e) => {
 
       {/* Conditionally render the "Have an account?" link */}
       {stage === 'request' && ( // Only show on the "request code" stage
-        <div className="mt-8 text-sm">
-          Have an account already? <span className="underline cursor-pointer">Log in here</span>
+        <Link href="/login">
+        <div className="mt-8 text-sm hover:underline pointer-cursor">
+         Back to Sign In 
         </div>
+        </Link>
       )}
 
     </div>

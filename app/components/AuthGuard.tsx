@@ -1,7 +1,8 @@
 'use client'
 import { useEffect, useState, ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
-import { getCurrentUser } from 'aws-amplify/auth';
+import { useRouter, usePathname } from 'next/navigation';
+import { isSignedIn } from '@/utils/isSignedIn'; // Import your util
+import Loading from '../loading';
 
 interface AuthGuardProps {
   children: ReactNode; // Accepts any valid React children (JSX)
@@ -11,25 +12,24 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const checkAuth = async () => {
-      try {
-        await getCurrentUser(); // Try to fetch the current user
+      const signedIn = await isSignedIn();
+      if (signedIn) {
         setIsAuthenticated(true);
-      } catch (error) {
-        console.error("Authentication error:", error); // Log the error
-        router.push('/login');
-      } finally {
-        setLoading(false);
+      } else {
+        router.replace(`/login?redirect=${pathname}`); // Store intended route
       }
+      setLoading(false);
     };
 
     checkAuth();
-  }, [router]);
+  }, [router, pathname]);
 
   if (loading) {
-    return <p className='p-4'>Loading...</p>; // Placeholder UI while checking auth
+    return <Loading/>; // Placeholder UI while checking auth
   }
 
   return isAuthenticated ? <>{children}</> : null; // Render children if authenticated

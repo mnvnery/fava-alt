@@ -1,6 +1,9 @@
 import { Resend } from 'resend';
 import { inviteUser } from "@/utils/inviteUser";
 import { NextResponse } from "next/server";
+import { InviteEmail } from "../../components/inviteEmail"
+import * as React from 'react';
+
 
 const resend = new Resend(process.env.RESEND_API);
 
@@ -24,10 +27,10 @@ export async function POST(req: Request) {
         try {
             console.log("Sending invite email...");
             const emailResponse = await resend.emails.send({
-                from: 'onboarding@resend.dev',
+                from: 'Fava Health <no-reply@invites.favahealth.com>',
                 to: email,
-                subject: 'Hello World',
-                html: `You've been invited to Fava Health! Click here: ${inviteLink}`
+                subject: 'Join Fava Health',
+                react: InviteEmail({ name: name, link: inviteLink }) as React.ReactElement,
             });
             console.log("Resend Response:", emailResponse);
         } catch (emailError) {

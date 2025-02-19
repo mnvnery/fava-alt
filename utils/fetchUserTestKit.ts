@@ -1,6 +1,5 @@
 // utils/updateUser.ts
 import { generateClient } from 'aws-amplify/data';
-import { fetchUserAttributes } from 'aws-amplify/auth';
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json"; // Ensure this file exists
 import type { Schema } from "@/amplify/data/resource";
@@ -11,21 +10,19 @@ Amplify.configure(outputs);
 const client = generateClient<Schema>({ authMode: "apiKey" });;
 
 
-export const getSignedUser = async () => {
-
-    const fetchedUserAttributes = await fetchUserAttributes();
+export const fetchUserTestKit = async (userId: string) => {
 
     // Call the Amplify client to update the user model
-    const { data: user, errors } = await client.models.User.list({
+    const { data: user, errors } = await client.models.TestKit.list({
         filter: {
-            email: {  // <-- Wrap email in a StringFilter object
-                eq: fetchedUserAttributes?.email, // Use the 'eq' (equals) operator
+            userId: {  // <-- Wrap email in a StringFilter object
+                eq: userId, // Use the 'eq' (equals) operator
             },
         }
     });
     
     if (errors && errors.length > 0) {
-        console.error("Error fetching user:", errors);
+        console.error("Error fetching testKit:", errors);
         throw new Error("Failed to fetch user"); // Or return null, or handle differently
     }
 

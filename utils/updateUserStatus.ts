@@ -3,6 +3,7 @@ import { generateClient } from 'aws-amplify/data';
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json"; // Ensure this file exists
 import type { Schema } from "@/amplify/data/resource";
+import { getSignedUser } from './getSignedUser';
 
 Amplify.configure(outputs);
 
@@ -10,19 +11,22 @@ Amplify.configure(outputs);
 const client = generateClient<Schema>({ authMode: "apiKey" });;
 
 
-export const updateUserStatus = async (userId: string | null | undefined, status: string) => { // Accept nullable userId
-    if (!userId) { // Early exit if userId is null or undefined
+export const updateUserStatus = async (status: string) => { // Accept nullable userId
+
+    const signedUser = await getSignedUser();
+
+    if (!signedUser) { // Early exit if userId is null or undefined
         console.error("User ID is missing.");
         return null;
     }
 
     try {
         const updatedUser = {
-            id: userId, // Use the provided userId
+            id: signedUser.id, // Use the provided userId
             status: status,
         };
 
-        const { data, errors } = await client.models.Users.update(updatedUser);
+        const { data, errors } = await client.models.User.update(updatedUser);
 
         if (errors) {
             console.error('Error updating user status:', errors);

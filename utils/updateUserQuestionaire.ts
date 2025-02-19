@@ -41,7 +41,7 @@ export const updateUserQuestionaire = async (userId: string, selectedAnswers: Se
         status: "Questionaire Complete"
     };
     // Call the Amplify client to update the user model
-    const { data, errors } = await client.models.Users.update(updatedUser);
+    const { data, errors } = await client.models.User.update(updatedUser);
 
     if (errors) {
         console.error('Error updating user:', errors);

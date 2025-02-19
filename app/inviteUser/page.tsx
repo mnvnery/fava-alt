@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json"; // Ensure this file exists
 import type { Schema } from "@/amplify/data/resource";
+import AdminAuthGuard from "../components/AdminAuthGuard";
 
 // ✅ Ensure Amplify is configured before using generateClient
 Amplify.configure(outputs);
@@ -16,11 +17,11 @@ const client = generateClient<Schema>({
 export default function InviteUser() {
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
-    const [users, setUsers] = useState<Array<Schema["Users"]["type"]>>([]);
+    const [users, setUsers] = useState<Array<Schema["User"]["type"]>>([]);
 
 
     function listUsers() {
-        client.models.Users.observeQuery().subscribe({
+        client.models.User.observeQuery().subscribe({
           next: (data) => setUsers([...data.items]),
         });
       }
@@ -44,12 +45,13 @@ export default function InviteUser() {
     }
 
     function deleteUser(id: string) {
-        client.models.Users.delete({ id })
+        client.models.User.delete({ id })
       }
 
     return (
+        <>
         <div className="flex flex-col justify-center items-center h-dvh p-5">
-            <div className="text-xl font-bold">Invite a User</div>
+            <div className="text-2xl font-bold">Invite a User</div>
 
             {/* Invite Form */}
             <div className="flex space-x-2 py-10">
@@ -75,6 +77,7 @@ export default function InviteUser() {
                 )}
             </div>
         </div>
+        </>
     );
 }
 

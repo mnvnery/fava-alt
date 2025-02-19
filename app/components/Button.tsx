@@ -2,7 +2,7 @@ interface ButtonProps {
     text: string;
     colour: string;
     onClick: (() => void) | undefined;
-  }
+}
   
 const Button = ({ text, colour, onClick }: ButtonProps) => { // Type the props directly
     return (

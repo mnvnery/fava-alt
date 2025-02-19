@@ -8,6 +8,8 @@ import { getSignedUser } from '@/utils/getSignedUser';
 import { updateUser } from '@/utils/updateUser';
 import { useState, useEffect } from 'react';
 import TitleTextBtn from '../components/TitleTextBtn'
+import Loading from '../loading'
+import OrderStatus from '../components/OrderStatus'
 
 interface User { 
     id: string;
@@ -43,27 +45,27 @@ export default function Order() {
           setUser(signedUser);
         }
         checkUser();
-      }, []);
+    }, []);
 
 
-      const updateUserData = async (updates: Partial<User>) => {
-            if (!user?.id) {
-                console.error("User ID is missing.");
-                alert("Please sign in or wait for user data to load.");
-                return;
-            }
-        
-            try {
-                await updateUser(user.id, updates);
-        
-                setUser((prevUser) => prevUser ? { ...prevUser, ...updates } : prevUser);
-            } catch (error) {
-                console.error("Failed to update user data:", error);
-            }
-        };
+    const updateUserData = async (updates: Partial<User>) => {
+        if (!user?.id) {
+            console.error("User ID is missing.");
+            alert("Please sign in or wait for user data to load.");
+            return;
+        }
+    
+        try {
+            await updateUser(user.id, updates);
+    
+            setUser((prevUser) => prevUser ? { ...prevUser, ...updates } : prevUser);
+        } catch (error) {
+            console.error("Failed to update user data:", error);
+        }
+    };
 
       const renderStage = () => {
-        if (!user) return <div className="flex justify-center items-center">Loading...</div>;
+        if (!user) return <Loading/>;
 
         switch (user.status) {
             case "Kit Check":
@@ -113,22 +115,26 @@ export default function Order() {
             case "Questionaire Complete":
                 return (
                     <div className="flex flex-col justify-center items-center w-full h-[80dvh] text-center px-12">
-                        <div className="text-xl font-bold">
+                        <div className="text-2xl font-bold">
                             Your order has been received and your test kit will be on its way shortly.
                             <br /><br />
                             Please come back here once you have received your kit.
                         </div>
                     </div>
                 );
+            case "Posted Kit":
+                return (
+                    <OrderStatus userStatus={user.status}/>
+                );
             default:
-                return <div className="flex justify-center items-center">Loading...</div>;
+                return <Loading/>;
         }
     };
     return (    
         <AuthGuard>
             <Nav/>
             {renderStage()}
-            <button className="p-5" onClick={() => updateUserData({ status: "Kit Check"})}>Update Status</button>
+            {/*<button className="p-5" onClick={() => updateUserData({ status: "Kit Check"})}>Update Status</button>*/}
         </AuthGuard>
     );
 }
