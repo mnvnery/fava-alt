@@ -7,8 +7,7 @@ import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
 import Link from 'next/link';
 
-Amplify.configure(outputs);
-
+Amplify.configure(outputs, { ssr: true });
 function ResetPassword() {
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');

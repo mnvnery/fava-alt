@@ -1,12 +1,10 @@
 import { generateClient } from "aws-amplify/data";
 import { Amplify } from "aws-amplify";
-import outputs from "@/amplify_outputs.json"; // Ensure this file exists
+import outputs from "@/amplify_outputs.json";
 import type { Schema } from "@/amplify/data/resource";
 
-// ✅ Ensure Amplify is configured before using generateClient
-Amplify.configure(outputs);
-
-const client = generateClient<Schema>({ authMode: "apiKey" }); // Or "userPool" if using Cognito
+Amplify.configure(outputs, { ssr: true });
+const client = generateClient<Schema>({ authMode: "apiKey" }); 
 
 export async function assignTestKit(userId: string, testKitSerial: string) {
     try {

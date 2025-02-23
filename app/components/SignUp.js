@@ -8,8 +8,7 @@ import { Amplify } from 'aws-amplify';
 import outputs from '@/amplify_outputs.json';
 import { useRouter } from 'next/navigation';
 
-Amplify.configure(outputs);
-
+Amplify.configure(outputs, { ssr: true });
 function SignUp() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');

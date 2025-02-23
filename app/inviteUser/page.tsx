@@ -8,8 +8,7 @@ import type { Schema } from "@/amplify/data/resource";
 import AdminAuthGuard from "../components/AdminAuthGuard";
 
 // ✅ Ensure Amplify is configured before using generateClient
-Amplify.configure(outputs);
-// Amplify Client
+Amplify.configure(outputs, { ssr: true });// Amplify Client
 const client = generateClient<Schema>({
     authMode: "apiKey"
 });

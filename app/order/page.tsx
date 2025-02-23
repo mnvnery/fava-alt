@@ -1,5 +1,4 @@
 'use client'
-import Nav from '../components/Nav'
 import Questionaire from '../components/Questionaire'
 import KitCheck from '../components/KitCheck'
 import TestKitOrder from '../components/TestKitOrder'
@@ -44,9 +43,11 @@ export default function Order() {
           const signedUser = await getSignedUser();
           setUser(signedUser);
         }
+        
         checkUser();
     }, []);
 
+    console.log(user)
 
     const updateUserData = async (updates: Partial<User>) => {
         if (!user?.id) {
@@ -131,10 +132,11 @@ export default function Order() {
         }
     };
     return (    
-        <AuthGuard>
-            <Nav/>
+        <div>
+            <AuthGuard>
             {renderStage()}
             {/*<button className="p-5" onClick={() => updateUserData({ status: "Kit Check"})}>Update Status</button>*/}
-        </AuthGuard>
+            </AuthGuard>
+        </div>
     );
 }

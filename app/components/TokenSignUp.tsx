@@ -14,8 +14,7 @@ import Loading from '../loading';
 import { isSignedIn } from "@/utils/isSignedIn";
 
 
-Amplify.configure(outputs);
-const client = generateClient<Schema>({ authMode: "apiKey" }); // Using API Key
+Amplify.configure(outputs, { ssr: true });const client = generateClient<Schema>({ authMode: "apiKey" }); // Using API Key
 
 function TokenSignUp() {
   const searchParams = useSearchParams();

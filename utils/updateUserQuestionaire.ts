@@ -4,8 +4,7 @@ import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json"; // Ensure this file exists
 import type { Schema } from "@/amplify/data/resource";
 
-Amplify.configure(outputs);
-
+Amplify.configure(outputs, { ssr: true });
 
 const client = generateClient<Schema>({ authMode: "apiKey" });;
 

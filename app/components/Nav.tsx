@@ -11,8 +11,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react"
 import Button from "./Button";
 
-Amplify.configure(outputs);
-
+Amplify.configure(outputs, { ssr: true });
 
 const Nav = () => { // No props in this component
   const [isOpen, setIsOpen] = useState(false);
